@@ -1,0 +1,73 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site2.master.cs" Inherits="WebEliranProject.Site2" %>
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <title><asp:ContentPlaceHolder ID="TitlePlaceHolder" runat="server" /></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #0066cc 0%, #003366 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .welcome-user {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="welcome-user" id="lblUsername" runat="server">
+            Welcome <%=userName %>
+        </div>
+        <h1>Guitar World - עולם הגיטרות</h1>
+
+        <nav>
+            <ul>
+                <li><a href="Html/HomePageMaster.aspx" id="home_page" runat="server">Home Page</a></li>
+                <li><a href="Html/Guitar_Katalog.aspx" id="g_katalog" runat="server">Guitar Katatlog</a></li>
+                <li><a href="Html/LoginPage.aspx" id="login" runat="server">Login</a></li>
+                <li><a href="Html/Register1.aspx" id="register" runat="server">Register</a></li>
+                <li><a href="Html/List.aspx" id="user_list" runat="server">User list</a></li>
+                <li><a href="Html/Update.aspx" id="update_profile" runat="server">Update profile</a></li>
+                <li><a href="Html/Logout.aspx" id="logout" runat="server">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </main>
+    <footer>
+        <p>&copy; 2024 Guitar World. כל הזכויות שמורות.</p>
+    </footer>
+</body>
+</html>
