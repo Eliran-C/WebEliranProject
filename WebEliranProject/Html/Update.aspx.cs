@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -24,12 +25,15 @@ namespace WebEliranProject.Html
                 }
 
 
-                string mail = Request.Form["mail"].ToString();
+                string mail = Session["email"].ToString();
                 string password = Request.Form["password"].ToString();
-                s = this.UpdateUser(mail, password);
+                string catagory = Request.Form["catagories"].ToString();
+                string newVal = Request.Form["newCat"].ToString();
+                s = this.UpdateUser(mail, password, catagory, newVal);
                 if (s > 0)
                 {
                     message = "Update Success";
+                    Helper.SendEmail(Session["email"].ToString(), "Your account was updated successfully. the category: " + catagory + " has been update to " + newVal + ".");
                 }
                 else
                 {
@@ -38,7 +42,7 @@ namespace WebEliranProject.Html
             }
         }
 
-        public int UpdateUser(string mail, string password)
+        public int UpdateUser(string mail, string password, string catagory, string newVal)
         {
             int suc = -1;
 
@@ -48,11 +52,9 @@ namespace WebEliranProject.Html
                 return suc;
 
             bool valid = false;
-            string catagory = Request.Form["catagories"].ToString();
-            string newVal = Request.Form["newCat"].ToString();
 
             if (catagory == "UserName")
-                valid = CheckFname(newVal);
+                valid = false;
             else if (catagory == "Password")
                 valid = CheckPass(newVal);
             else if (catagory == "Email")
@@ -69,30 +71,26 @@ namespace WebEliranProject.Html
                 string sql = "UPDATE UsersTable SET " + catagory + "= '"+newVal+ "' WHERE Email= '" + mail + "' AND Password = '" + password + "'";
                 if(Helper.DoQuery(fileName, sql))
                     suc = 1;
+                if (catagory == "Email")
+                {
+                    Session["Email"] = newVal;
+                }
             }
 
             return suc;
         }
 
-
-        //check function's
-        private bool CheckFname(string fname)
+        public static bool MakeAdminAPI(string mail, string password)
         {
-            //check null
-            if (fname == null) return false;
-
-            //check length
-            if (fname.Length < 2 || fname.Length > 15) return false;
-
-            //check alpha
-            foreach (char c in fname)
-            {
-                if (IsSpecialCharacter(c)) return false;
-            }
-
-            return true;
+            string category = "isAdmin";
+            string newVal = "1";
+            string sql = "UPDATE UsersTable SET " + category + "= '" + newVal + "' WHERE Email= '" + mail + "' AND Password = '" + password + "'";
+            if (Helper.DoQuery(General.FileName, sql))
+                return true;
+            return false;
         }
 
+        //check function's
         private bool CheckPass(string pass)
         {
             //check null

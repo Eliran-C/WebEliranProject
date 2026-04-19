@@ -18,7 +18,9 @@ namespace WebEliranProject.Html
         {
             if(this.IsPostBack)
             {
-                s = this.DelUser();
+                string mail = Request.Form["mail"].ToString();
+                string password = Request.Form["password"].ToString();
+                s = Delete_User.DelUser(mail, password);
                 if (s > 0)
                 {
                     message = "Delete Success";
@@ -30,24 +32,21 @@ namespace WebEliranProject.Html
             }
         }
 
-        private int DelUser()
+        public static int DelUser(string mail, string password)
         {
             int suc = -1;
-
-            string mail = Request.Form["mail"].ToString();
-            string password = Request.Form["password"].ToString();
 
             if(CheckMail(mail) && CheckPass(password))
             {
                 string sql = "DELETE FROM UsersTable WHERE Email= '" + mail + "' AND Password = '" + password + "'";
-                Helper.DoQuery(fileName, sql);
+                Helper.DoQuery(General.FileName, sql);
                 suc = 1;
             }
 
             return suc;
         }
 
-        private bool CheckPass(string pass)
+        public static bool CheckPass(string pass)
         {
             //check null
             if (pass == null) return false;
@@ -59,7 +58,7 @@ namespace WebEliranProject.Html
             return IsValidString(pass);
         }
 
-        private bool CheckMail(string mail)
+        public static bool CheckMail(string mail)
         {
             //check null
             if (mail == null) return false;
@@ -73,7 +72,7 @@ namespace WebEliranProject.Html
             return true;
         }
 
-        private bool IsValidString(string input)
+        public static bool IsValidString(string input)
         {
             foreach (char c in input)
             {
@@ -85,7 +84,7 @@ namespace WebEliranProject.Html
             return true;
         }
 
-        private bool IsSpecialCharacter(char c)
+        public static bool IsSpecialCharacter(char c)
         {
             char[] specialChars = { '@', '#', '$', '%', '&', '*', '!', '_', '-', '+', '=', '.', ',' };
             return Array.Exists(specialChars, element => element == c);

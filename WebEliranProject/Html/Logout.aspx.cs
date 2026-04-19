@@ -13,6 +13,8 @@ namespace WebEliranProject.Html
         {
             Session["userName"] = "visitor";
             Session["admin"] = 0;
+            Session["email"] = "";
+            Session["password"] = "";
             Response.Redirect("HomePageMaster.aspx");
         }
     }

@@ -24,11 +24,18 @@ namespace WebEliranProject.Html
                     message = "Register success";
                     Session["userName"] = Request.Form["fname"];//לדייק מול הבסיס נתונים 
                     Session["admin"] = 0;
+                    Session["email"] = Request.Form["mail"].ToString();
+                    Session["password"] = Request.Form["password"].ToString();
+
+                    //send email
+                    string mail = Request.Form["mail"].ToString();
+                    string mailMessage = "Hello " + Request.Form["fname"] + ",\n\nWelcome to Eliran's guitar world! We're thrilled to have you as a member of our community. If you have any questions or need assistance, feel free to reach out to us.\n\nBest regards,\nEliran's guitar world team";
+                    Helper.SendEmail(mail, mailMessage);
                     Response.Redirect("HomePageMaster.aspx");
                 }
                 else
                 {
-                    message = "Register failed";
+                    message = "Register failed\n" + message;
                 }
             }
         }
@@ -47,6 +54,24 @@ namespace WebEliranProject.Html
             if(CheckFname(fname) && CheckPass(pass) && CheckMail(mail)
                 && CheckGender(gender) && CheckBornYear(bornYear))
             {
+                bool isUserName = Helper.IsExist(fileName, "SELECT * FROM UsersTable WHERE UserName='" + fname + "'");
+                bool isEmail = Helper.IsExist(fileName, "SELECT * FROM UsersTable WHERE Email='" + mail + "'");
+                if (isUserName && isEmail)
+                {
+                    message = "This username and email are already in use.";
+                    return sc;
+                }
+                else if (isUserName)
+                {
+                    message = "This username is already in use.";
+                    return sc;
+                }
+                else if (isEmail)
+                {
+                    message = "This email is already in use.";
+                    return sc;
+                }
+
                 string sql = "INSERT INTO UsersTable (UserName,Password,Email,BornYear,Gender) VALUES('" + fname + "','" + pass + "','" + mail + "','" + int.Parse(bornYear) + "','" + gender + "')";
                 Helper.DoQuery(fileName, sql);
                 sc = 1;

@@ -1,9 +1,11 @@
 ﻿
 using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -19,8 +21,39 @@ using System.Xml.Linq;
 
 
 public class Helper
-{     
-	public static SqlConnection ConnectToDb(string fileName)
+{
+    public static bool SendEmail(string toEmail, string messageBody)
+    {
+        string fromEmail = "eliranguitarworld@gmail.com";
+        string password = "xlcuwroopzknikps";
+        string subject = "message from Eliran's guitar world";
+
+        try
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress(fromEmail);
+                mail.To.Add(toEmail);
+                mail.Subject = subject;
+                mail.Body = messageBody;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new NetworkCredential(fromEmail, password);
+                    smtp.EnableSsl = true;
+
+                    smtp.Send(mail);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message); 
+            return false;
+        }
+        return true;
+    }
+    public static SqlConnection ConnectToDb(string fileName)
     {
         string path = HttpContext.Current.Server.MapPath("App_Data/") + fileName;
        

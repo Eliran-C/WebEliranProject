@@ -71,13 +71,10 @@
         <h1>משתמש לשינוי</h1>
 
         <input type="text" id="password" name="password" placeholder="סיסמה" required minlength="5" maxlength="10"/>
-
-        <input type="email" id="mail" name="mail" placeholder="דואר אלקטרוני" required minlength="2" maxlength="50"/>
        
         <h2>שדה לשינוי</h2>
         <select id="catagories" name="catagories" required>
             <option value="">--בחר שדה--</option>
-            <option value="UserName">שם משתמש</option>
             <option value="Password">סיסמה</option>
             <option value="Email">מייל</option>
             <option value="BornYear">שנת לידה</option>

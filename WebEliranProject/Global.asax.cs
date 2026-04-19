@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.UI.WebControls;
+using System.Web.Http;
 
 namespace WebEliranProject
 {
@@ -13,13 +15,24 @@ namespace WebEliranProject
 
         protected void Application_Start(object sender, EventArgs e)
         {
-           
+            GlobalConfiguration.Configure(config =>
+            {
+                config.MapHttpAttributeRoutes();
+
+                config.Routes.MapHttpRoute(
+                    name: "DefaultApi",
+                    routeTemplate: "api/{controller}/{id}",
+                    defaults: new { id = System.Web.Http.RouteParameter.Optional }
+                );
+            });
         }
 
         protected void Session_Start(object sender, EventArgs e)
         {
             Session["userName"] = "visitor";
             Session["admin"] = 0;
+            Session["email"] = "";
+            Session["password"] = "";
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
@@ -41,6 +54,8 @@ namespace WebEliranProject
         {
             Session["userName"] = "visitor";
             Session["admin"] = 0;
+            Session["email"] = "";
+            Session["password"] = "";
         }
 
         protected void Application_End(object sender, EventArgs e)
