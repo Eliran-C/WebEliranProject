@@ -107,7 +107,6 @@
                     <option value="Email">מייל</option>
                     <option value="BornYear">שנת לידה</option>
                     <option value="Gender">מין</option>
-                   <!-- <option value="isAdmin">להוריד/להפוך למנהל</option> -->
                 </select>
             
                 <input type="text" id="newCat" name="newCat" placeholder="הערך החדש" required/>
